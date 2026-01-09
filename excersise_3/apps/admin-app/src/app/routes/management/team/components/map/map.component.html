@@ -1,0 +1,47 @@
+<ng-template #loadingTemplate>
+  <app-no-data-template
+    iconName="lucideDatabase"
+    iconColor="var(--color-green-500)"
+    title="Loading GPS Data"
+    description="Retrieving GPS data from the database. This may take a moment..."
+    [canRefresh]="false"
+  />
+</ng-template>
+
+<ng-template #errorTemplate>
+  <app-no-data-template
+    iconName="lucideDatabaseZap"
+    iconColor="var(--color-red-600)"
+    title="Data not available"
+    description="We couldn\'t find the GPS data. This might happen if the lecture record is new or incomplete."
+    [canRefresh]="true"
+    [buttonText]="'Try again'"
+    [helpText]="'If this issue persists, please make sure the lecture is properly registered in the system.'"
+  />
+</ng-template>
+
+<ng-template #noDataTemplate>
+  <app-no-data-template
+    iconName="lucideSquareX"
+    iconColor="var(--color-blue-500)"
+    title="No GPS Data Available"
+    description="No GPS data available for this lecture."
+    [canRefresh]="false"
+  />
+</ng-template>
+
+<ng-template #successTemplate>
+  <div #mapContainer class="w-full h-full"></div>
+</ng-template>
+
+@let gpsPoints = _gpsPoints();
+<!-- - -->
+@if (gpsPoints === undefined) {
+<ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+} @else if (gpsPoints === null) {
+<ng-container *ngTemplateOutlet="errorTemplate"></ng-container>
+} @else if (!gpsPoints.length) {
+<ng-container *ngTemplateOutlet="noDataTemplate"></ng-container>
+} @else {
+<ng-container *ngTemplateOutlet="successTemplate"></ng-container>
+}

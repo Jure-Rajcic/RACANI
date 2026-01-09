@@ -1,0 +1,41 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Firebase Functions (functions)",
+      "port": 9229,
+      "restart": true,
+      "timeout": 30000,
+      "localRoot": "${workspaceFolder}/firebase/functions",
+      "remoteRoot": "${workspaceFolder}/firebase/functions",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/firebase/functions/dist/**/*.js"],
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Firebase Functions (jobs)",
+      "port": 9230,
+      "restart": true,
+      "timeout": 30000,
+      "localRoot": "${workspaceFolder}/firebase/jobs",
+      "remoteRoot": "${workspaceFolder}/firebase/jobs",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/firebase/jobs/dist/**/*.js"],
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    }
+  ]
+}

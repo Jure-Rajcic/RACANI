@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@env/*": ["../../environment/*"],
+      "@utils/*": ["./utils/*"],
+      "@models/*": ["./models/*"],
+      "@read/read.doc": ["./models/admin/read/read.doc.ts"],
+      "@write/write.doc": ["./models/admin/write/write.doc.ts"]
+    }
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "dist"]
+}

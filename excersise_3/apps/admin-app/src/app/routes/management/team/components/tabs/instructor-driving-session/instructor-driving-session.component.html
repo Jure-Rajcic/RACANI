@@ -1,0 +1,267 @@
+<ng-template #loadingTemplate>
+  <app-no-data-template
+    iconName="lucideDatabase"
+    iconColor="var(--color-green-500)"
+    title="Loading Instructor Data"
+    description="Retrieving instructor data from the database. This may take a moment..."
+    [canRefresh]="false"
+  />
+</ng-template>
+
+<ng-template #errorTemplate>
+  <app-no-data-template
+    iconName="lucideDatabaseZap"
+    iconColor="var(--color-red-600)"
+    title="Data not available"
+    description="We couldn\'t find the instructor profile data. This might happen if the instructor record is new or incomplete."
+    [canRefresh]="true"
+    [buttonText]="'Try again'"
+    [helpText]="'If this issue persists, please make sure the instructor is properly registered in the system.'"
+  />
+</ng-template>
+
+<ng-template #successTemplate>
+  @let lesson = _lesson();
+  <div class="flex flex-col gap-4 mt-4">
+    <!-- Enhanced Lesson Details Header -->
+    <div class="grid grid-cols-1 md:grid-cols-9 gap-4 mb-6">
+      <!-- Date Card -->
+      <div class="col-span-3 bg-accent rounded-lg p-4 border border-border flex items-center bg-background">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center mr-3 bg-blue-100">
+          <ng-icon name="lucideCalendarClock" style="color: #3b82f6" size="24"></ng-icon>
+        </div>
+        <div>
+          <div class="flex flex-row items-center gap-2">
+            <span class="text-muted-foreground">Date:</span>
+            <!-- use date with fullDate -->
+            <span class="text-primary font-bold">{{
+              lesson.timestampStart ? (lesson.timestampStart | date : 'fullDate') : 'N/A'
+            }}</span>
+          </div>
+          <div class="flex flex-row items-center gap-2">
+            <span class="text-muted-foreground">Duration:</span>
+            <span class="text-primary font-bold">{{
+              lesson.durationInSeconds ? (lesson.durationInSeconds | duration : 'full') : 'N/A'
+            }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-span-2 bg-accent rounded-lg p-4 border border-border flex items-center bg-background">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center mr-3 bg-green-100">
+          <ng-icon name="lucideClock" style="color: #10b981" size="24"></ng-icon>
+        </div>
+        <div>
+          <div class="flex flex-row items-center gap-2">
+            <span class="text-muted-foreground">Start Time:</span>
+            <span class="text-primary font-bold">{{
+              lesson.timestampStart ? (lesson.timestampStart | date : 'shortTime') : 'N/A'
+            }}</span>
+          </div>
+          <div class="flex flex-row items-center gap-2">
+            <span class="text-muted-foreground">End Time:</span>
+            <span class="text-primary font-bold">{{
+              lesson.timestampEnd ? (lesson.timestampEnd | date : 'shortTime') : 'N/A'
+            }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-span-4 bg-accent rounded-lg p-4 border border-border flex items-center bg-background">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center mr-3 bg-purple-100">
+          <ng-icon name="lucideMapPinned" style="color: #8b5cf6" size="24"></ng-icon>
+        </div>
+        <div>
+          <div class="flex flex-row items-center gap-2">
+            <span class="text-muted-foreground">Start Location:</span>
+            <span class="text-primary font-bold overflow-x-auto">{{ lesson.startingLocation || 'N/A' }}</span>
+          </div>
+          <div class="flex flex-row items-center gap-2">
+            <span class="text-muted-foreground">End Location:</span>
+            <span class="text-primary font-bold">{{ lesson.endingLocation || 'N/A' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Route & Video Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <!-- Route Map -->
+      <div class="bg-white rounded-xl overflow-hidden border border-gray-200">
+        <div class="p-4">
+          <div class="flex items-center gap-2">
+            <ng-icon name="lucideRoute" class="text-lg"></ng-icon>
+            <h3 class="">Driving Route</h3>
+          </div>
+        </div>
+        <div class="relative h-[350px]">
+          @let _gpsRecords = gpsRecords(); @if(_gpsRecords) {
+          <app-map-component [gpsPoints]="_gpsRecords" />
+
+          } @else {
+          <!-- Empty State for Map -->
+          <div class="flex flex-col items-center justify-center h-full bg-purple-50 text-center">
+            <div class="w-20 h-20 bg-purple-200 rounded-full flex items-center justify-center mb-4">
+              <ng-icon name="lucideMap" class="text-purple-600 text-3xl"></ng-icon>
+            </div>
+            <h4 class="text-lg font-semibold text-gray-700 mb-2">No Route Data Available</h4>
+            <p class="text-gray-500 max-w-sm px-4">
+              GPS tracking data is not available for this lesson. The route information may not have been recorded.
+            </p>
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- Lesson Video -->
+      <div class="bg-white rounded-xl overflow-hidden border border-gray-200">
+        <div class="p-4">
+          <div class="flex items-center gap-2">
+            <ng-icon name="lucideVideo" class="text-lg"></ng-icon>
+            <h3>Lesson Recording</h3>
+          </div>
+        </div>
+        <div class="relative h-[350px]">
+          @let _sanitizedVideoUrl = sanitizedVideoUrl(); @if(_sanitizedVideoUrl) {
+          <iframe
+            class="w-full h-full"
+            [src]="_sanitizedVideoUrl"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+          } @else {
+          <!-- Empty State for Video -->
+          <div class="flex flex-col items-center justify-center h-full bg-red-50 text-center">
+            <div class="w-20 h-20 bg-red-200 rounded-full flex items-center justify-center mb-4">
+              <ng-icon name="lucideVideo" class="text-red-600 text-3xl"></ng-icon>
+            </div>
+            <h4 class="text-lg font-semibold text-gray-700 mb-2">No Recording Available</h4>
+            <p class="text-gray-500 max-w-sm px-4">
+              The lesson recording is not available for this session. This may be due to technical issues or privacy settings.
+            </p>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Logs Section -->
+    <div class="mb-6">
+      <div class="rounded-xl border border-gray-200">
+        <div class="p-4">
+          <div class="flex items-center gap-2">
+            <ng-icon name="lucideTriangleAlert" class="text-lg"></ng-icon>
+            <h3 class="">Mistakes</h3>
+            <span class="ml-auto px-2 py-1 rounded-full text-sm bg-amber-100 text-amber-800">
+              @let errorLogsCount = lesson.errorLogs?.length || 0;
+              {{ errorLogsCount ? errorLogsCount + ' issues' : 'No issues' }}
+            </span>
+          </div>
+        </div>
+        <div class="p-4 pt-0 space-y-3 max-h-[300px] overflow-y-auto">
+          @if (lesson.errorLogs && lesson.errorLogs.length > 0) {
+            @for (log of lesson.errorLogs; track $index) {
+              @if(log) {
+              <div class="flex items-start gap-4 p-4 rounded-lg border transition-all hover:shadow-md">
+                <!-- Event Details -->
+                <div class="flex-grow min-w-0">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span
+                      class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium uppercase tracking-wide"
+                      [ngClass]="{
+                        'bg-red-100 text-red-800': log.severity === 'error',
+                        'bg-amber-100 text-amber-800': log.severity === 'warning'
+                      }"
+                    >
+                      {{ log.severity || 'N/A' }}
+                    </span>
+                    <div class="flex items-center gap-1 text-xs text-muted-foreground">
+                      <ng-icon name="lucideClock" class="text-xs"></ng-icon>
+                      {{ log.actualTimestamp ? (log.actualTimestamp | date : 'medium') : 'N/A' }}
+                    </div>
+                  </div>
+
+                  <p class="font-medium text-gray-900 mb-1">{{ log.description || 'N/A' }}</p>
+
+                  <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div class="flex items-center gap-1">
+                      <ng-icon name="lucideMapPin" class="text-xs"></ng-icon>
+                      {{ log.description || 'N/A' }}
+                    </div>
+                    <div class="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors">
+                      <ng-icon name="lucidePlay" class="text-xs"></ng-icon>
+                      Video:
+                      {{ log.relativeOffsetInSeconds ? (log.relativeOffsetInSeconds | duration : 'digital') : 'N/A' }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              }
+            }
+          } @else {
+            <!-- Empty State for Error Logs -->
+            <div class="flex flex-col items-center justify-center py-6 px-4 text-center">
+              <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mb-3">
+                <ng-icon name="lucideCheck" class="text-emerald-600 text-lg"></ng-icon>
+              </div>
+              <h4 class="text-sm font-semibold text-gray-900 mb-1">No Mistakes Recorded</h4>
+              <p class="text-gray-500 text-xs max-w-xs">
+                The instructor did not record any mistakes or issues for this lesson.
+              </p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Instructor Notes -->
+    <div class="mb-4">
+      <div class="rounded-xl border border-gray-200 overflow-hidden">
+        <div class="p-4">
+          <div class="flex items-center gap-2">
+            <ng-icon name="lucideFileText" class="text-lg"></ng-icon>
+            <h3 class="">Instructor Notes</h3>
+          </div>
+        </div>
+        <div class="p-4 pt-0">
+          @if (lesson.notes && lesson.notes.length > 0) {
+            @for (note of lesson.notes; track $index) { 
+              @if(note) {
+              <div class="mb-4 last:mb-0">
+                <div class="flex items-center gap-2 mb-2 text-sm text-gray-500">
+                  <ng-icon name="lucideClock" class="text-xs"></ng-icon>
+                  <span>{{ note.date ? (note.date | date : 'medium') : 'N/A' }}</span>
+                </div>
+                <p class="text-gray-700 leading-relaxed bg-gray-50 p-3 rounded-lg">{{ note.note || 'N/A' }}</p>
+              </div>
+              }
+            }
+          } @else {
+            <!-- Empty State for Notes -->
+            <div class="flex flex-col items-center justify-center py-6 px-4 text-center">
+              <div class="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center mb-3">
+                <ng-icon name="lucideFileText" class="text-sky-600 text-lg"></ng-icon>
+              </div>
+              <h4 class="text-sm font-semibold text-gray-900 mb-1">No Additional Notes</h4>
+              <p class="text-gray-500 text-xs max-w-xs">
+                The instructor didn't add any additional notes or observations for this lesson.
+              </p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+@let doc = _doc();
+<!-- - -->
+@if (doc === undefined) {
+<ng-container *ngTemplateOutlet="loadingTemplate"></ng-container>
+} @else if (doc === null) {
+<ng-container *ngTemplateOutlet="errorTemplate"></ng-container>
+} @else {
+<ng-container *ngTemplateOutlet="successTemplate"></ng-container>
+}

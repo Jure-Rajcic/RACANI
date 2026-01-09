@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "driving-school-d56f0"
+  },
+  "targets": {
+    "driving-school-d56f0": {
+      "hosting": {
+        "client-app": [
+          "client-app-demo-pgw9z"
+        ],
+        "admin-app": [
+          "admin-app-demo-es2ri"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

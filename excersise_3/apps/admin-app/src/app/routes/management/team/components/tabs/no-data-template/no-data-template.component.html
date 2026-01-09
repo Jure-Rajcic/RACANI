@@ -1,0 +1,17 @@
+<div
+  class="h-full flex flex-col items-center justify-center gap-0 text-center p-16 rounded-lg border border-border bg-card/50"
+>
+  <div class="animate-pulse mb-2">
+    <ng-icon [name]="_iconName()" [style.color]="_iconColor()" class="text-5xl mb-3"></ng-icon>
+  </div>
+  <h3 class="text-xl font-semibold mb-2">{{ _title() }}</h3>
+  <p class="text-muted-foreground mb-6 max-w-md">{{ _description() }}</p>
+  @if(_canRefresh()){
+  <button hlmBtn variant="outline" class="transition-all hover:scale-105" (click)="onButtonClick()">
+    <ng-icon name="lucideRefreshCcw" class="mr-2"></ng-icon>
+    {{ _buttonText() || 'Refresh' }}
+  </button>
+  } @if(_helpText()){
+  <p class="text-xs text-muted-foreground mt-6 max-w-sm">{{ _helpText() }}</p>
+  }
+</div>

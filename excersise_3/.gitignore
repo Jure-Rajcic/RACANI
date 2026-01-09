@@ -1,0 +1,62 @@
+# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# sensitive files & secrets
+.secrets/
+apps/admin-app/src/app/routes/automation/common.sh
+apps/admin-app/src/app/routes/automation/common.json
+apps/admin-app/src/app/routes/automation/exam_list_*.pdf
+apps/admin-app/src/app/config/env/.env
+
+# compiled output
+dist
+tmp
+out-tsc
+
+# dependencies
+node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+
+.nx/cache
+.nx/workspace-data
+
+.angular
+
+# Exclude out.json files in setup folder
+apps/admin-app/src/app/setup/**/out.json
+./firestore-debug.log
+firebase/functions/firebase-debug.log
+environment/.env
+
+firestore-debug.log
+firebase-debug.log
+pubsub-debug.log
+tools

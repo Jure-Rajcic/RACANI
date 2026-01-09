@@ -1,0 +1,50 @@
+<ng-template #success>
+  <div class="max-w-[250px] font-sans p-0 m-0">
+    <!-- Title -->
+    <div class="font-bold text-base mb-2 text-gray-800 leading-tight">
+      Warning at {{ _timestamp()?.toDate() | date : 'h:mm:ss a' }}
+    </div>
+
+    <!-- Warning -->
+    <div class="my-2 leading-relaxed text-amber-600 text-sm whitespace-pre-line">
+      {{ _warning() }}
+    </div>
+
+    <!-- Address -->
+    <div class="my-2 leading-relaxed text-gray-600 text-sm whitespace-pre-line">
+      {{ formattedAddress() }}
+    </div>
+
+    <!-- Street View Button -->
+    <div class="my-3">
+      <a
+        [href]="streetViewUrl()"
+        target="_blank"
+        class="inline-block bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 no-underline rounded text-xs font-bold w-full text-center box-border"
+      >
+        🏠 View Street View
+      </a>
+    </div>
+
+    <!-- Coordinates -->
+    <div class="mt-2 text-xs text-gray-400">
+      {{ coordinatesText() }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <hlm-spinner />
+</ng-template>
+
+<ng-template #error>
+  <div class="p-4 text-center text-gray-600 font-sans">Error loading address.</div>
+</ng-template>
+
+@if(geocode() === undefined) {
+<ng-container [ngTemplateOutlet]="loading"></ng-container>
+} @else if(geocode() === null) {
+<ng-container [ngTemplateOutlet]="error"></ng-container>
+} @else {
+<ng-container [ngTemplateOutlet]="success"></ng-container>
+}

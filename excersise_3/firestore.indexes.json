@@ -1,0 +1,11 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "instructors",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "instructorId", "order": "ASCENDING" }
+      ]
+    }
+  ]
+}

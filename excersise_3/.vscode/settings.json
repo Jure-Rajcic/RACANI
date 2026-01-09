@@ -1,0 +1,35 @@
+{
+  "cSpell.words": [
+    "alertdialog",
+    "aspectratio",
+    "autoskole",
+    "datepicker",
+    "datumrod",
+    "DISENROLLED",
+    "DISENROLMENT",
+    "Firestore",
+    "formfield",
+    "gdata",
+    "hovercard",
+    "imerod",
+    "kandid",
+    "KHTML",
+    "Millis",
+    "Oibs",
+    "PPSP",
+    "prezime",
+    "Rajčić",
+    "rbruknjizi",
+    "Referer",
+    "rtdb",
+    "scrollarea",
+    "sonner",
+    "Startline",
+    "subcollections"
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

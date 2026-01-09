@@ -1,0 +1,11 @@
+import { createCashedInstructorDetailsStudentDocumentWhenInstructorDocIsCreated } from './create_v1';
+import { editCashedInstructorDetailsStudentDocumentWhenDrivingTrainingSessionDocIsCreated } from './edit_v1.01';
+import { editCashedInstructorDetailsStudentsDocumentWhenDrivingTrainingSessionDocumentIsCreated } from './edit_v1.02';
+import { editCashedInstructorDetailsStudentsUsageDocumentWhenDrivingTrainingSessionDocumentIsCreated } from './edit_v1.04';
+
+export const IMPORTS_FOR_CASHED_INSTRUCTOR_DETAILS_STUDENTS = [
+  createCashedInstructorDetailsStudentDocumentWhenInstructorDocIsCreated,
+  editCashedInstructorDetailsStudentDocumentWhenDrivingTrainingSessionDocIsCreated,
+  editCashedInstructorDetailsStudentsDocumentWhenDrivingTrainingSessionDocumentIsCreated,
+  editCashedInstructorDetailsStudentsUsageDocumentWhenDrivingTrainingSessionDocumentIsCreated,
+];

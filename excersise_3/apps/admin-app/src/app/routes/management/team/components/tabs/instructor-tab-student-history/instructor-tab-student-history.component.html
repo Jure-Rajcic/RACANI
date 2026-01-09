@@ -1,0 +1,193 @@
+<ng-template #loadingTemplate>
+  <app-no-data-template
+    iconName="lucideDatabase"
+    iconColor="var(--color-green-500)"
+    title="Loading Instructor Data"
+    description="Retrieving instructor data from the database. This may take a moment..."
+    [canRefresh]="false"
+  />
+</ng-template>
+
+<ng-template #errorTemplate>
+  <app-no-data-template
+    iconName="lucideDatabaseZap"
+    iconColor="var(--color-red-600)"
+    title="Data not available"
+    description="We couldn\'t find the instructor profile data. This might happen if the instructor record is new or incomplete."
+    [canRefresh]="true"
+    [buttonText]="'Try again'"
+    [helpText]="'If this issue persists, please make sure the instructor is properly registered in the system.'"
+  />
+</ng-template>
+
+<ng-template #lessonSummary let-doc="doc">
+  <div class="flex flex-col w-full gap-1">
+    <div class="flex items-center justify-between w-full">
+      <div class="flex items-center gap-2">
+        <ng-icon name="lucideBook" class="text-blue-600 text-sm" />
+        <span class="text-sm font-semibold text-gray-800">Lesson</span>
+
+        <div class="bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-xs font-bold">
+          #{{ doc.lessonNumber || 'N/A' }}
+        </div>
+
+        <div class="flex items-center gap-1 ml-2">
+          <ng-icon name="remixStarFill" class="text-yellow-400 text-xs" />
+          <ng-icon name="remixStarFill" class="text-yellow-400 text-xs" />
+          <ng-icon name="remixStarFill" class="text-yellow-400 text-xs" />
+          <ng-icon name="remixStarHalfLine" class="text-yellow-400 text-xs" />
+          <ng-icon name="remixStarLine" class="text-gray-300 text-xs" />
+        </div>
+      </div>
+
+      <div class="text-xs text-gray-500">
+        {{ doc.lessonTimestamp | date : 'MMM d, y • h:mm a' }}
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between w-full">
+      <div class="flex items-center gap-2 text-sm text-gray-600">
+        <span>{{
+          (
+            doc.vehicleDetails.vehicleModel +
+            ' ' +
+            doc.vehicleDetails.vehicleYear +
+            ' ' +
+            doc.vehicleDetails.vehicleTrim
+          ).trim() || 'N/A'
+        }}</span>
+        <span class="text-xs text-gray-400">•</span>
+        <span class="text-xs font-mono bg-gray-100 px-2 py-1 rounded">
+          ID: {{ doc.vehicleDetails.vehicleId || 'N/A' }}
+        </span>
+      </div>
+
+      <div class="flex items-center gap-1 text-xs text-gray-500 hover:underline">
+        <span>View More</span>
+        <ng-icon name="lucideChevronDown" class="text-xs" />
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #examSummary let-doc="doc">
+  <div class="flex flex-col w-full gap-1">
+    <div class="flex items-center justify-between w-full">
+      <div class="flex items-center gap-2">
+        <ng-icon name="lucideGraduationCap" class="text-purple-600 text-sm" />
+        <span class="text-sm font-semibold text-gray-800">Driving Exam</span>
+
+        <div class="bg-purple-100 text-purple-800 px-2 py-1 rounded-md text-xs font-bold">
+          #{{ doc.examTryNumber || 'N/A' }}
+        </div>
+
+        <div class="flex items-center gap-1 ml-2">
+          @if (doc.examPassed) {
+          <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">PASSED</span>
+          } @else {
+          <span class="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full font-medium">FAILED</span>
+          }
+        </div>
+      </div>
+
+      <div class="text-xs text-gray-500">
+        {{ doc.examTimestamp | date : 'MMM d, y • h:mm a' }}
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between w-full">
+      <div class="flex items-center gap-2 text-sm text-gray-600">
+        <span>{{
+          (
+            doc.vehicleDetails.vehicleModel +
+            ' ' +
+            doc.vehicleDetails.vehicleYear +
+            ' ' +
+            doc.vehicleDetails.vehicleTrim
+          ).trim() || 'N/A'
+        }}</span>
+        <span class="text-xs font-mono bg-gray-100 px-2 py-1 rounded">
+          ID: {{ doc.vehicleDetails.vehicleId || 'N/A' }}
+        </span>
+      </div>
+
+      <div class="flex items-center gap-1 text-xs text-gray-500 hover:underline">
+        <span>View More</span>
+        <ng-icon name="lucideChevronDown" class="text-xs" />
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #successTemplate>
+  @let computedTransformedDocs = _computedTransformedDocs()!; @if(!!computedTransformedDocs.length) {
+  <div class="bg-background rounded-lg border border-border px-4 py-1 flex flex-col gap-2">
+    <div hlmAccordion [type]="'multiple'" class="flex flex-col gap-1 p-0 m-0">
+      @for (doc of computedTransformedDocs; track $index) {
+
+      <div hlmAccordionItem [isOpened]="false" class="py-1 m-0">
+        <h3 class="contents">
+          <button
+            hlmAccordionTrigger
+            class="hover:no-underline cursor-pointer w-full py-2"
+            (click)="toggleAccordion($index)"
+          >
+            @switch(doc.type) { @case('lesson') {
+            <ng-container [ngTemplateOutlet]="lessonSummary" [ngTemplateOutletContext]="{ doc: doc }" />
+            } @case('exam') {
+            <ng-container [ngTemplateOutlet]="examSummary" [ngTemplateOutletContext]="{ doc: doc }" />
+            } }
+          </button>
+        </h3>
+
+        <hlm-accordion-content class="data-[state=open]:h-auto">
+          <app-instructor-driving-session
+            [sourceDocumentId]="doc.sourceDocumentId ?? null"
+            [type]="doc.type"
+            [expanded]="isAccordionOpen($index)"
+          />
+        </hlm-accordion-content>
+      </div>
+      }
+    </div>
+  </div>
+  } @else {
+
+  <div class="bg-background rounded-lg border border-border p-8 text-center">
+    <ng-icon name="lucideCar" class="text-muted-foreground text-4xl mb-3" />
+    <h3 class="text-lg font-medium mb-2">Select a Vehicle</h3>
+    <p class="text-muted-foreground mb-4">Choose a vehicle from above to view its trip history.</p>
+    <button hlmBtn variant="outline">
+      <ng-icon name="lucideCalendar" class="mr-2" />
+      Log New Trip
+    </button>
+  </div>
+  }
+</ng-template>
+
+<div class="rounded-lg p-4 border border-border mb-6">
+  <!-- Header -->
+  <div class="flex items-start justify-between">
+    <div class="flex flex-col gap-1">
+      <span class="text-sm text-muted-foreground">
+        Student: <span class="font-medium text-accent-foreground">Ivana Vuković</span>
+      </span>
+    </div>
+
+    <!-- Field ID -->
+    <span class="text-xs px-2 py-1 rounded-md bg-muted text-muted-foreground"> Field ID: 1 </span>
+  </div>
+
+  <!-- Description -->
+  <p class="text-sm text-muted-foreground leading-relaxed">
+    This section displays the historical academic records and activity timeline associated with the selected student.
+  </p>
+
+  @let computedTransformedDocs = _computedTransformedDocs(); @if (computedTransformedDocs === undefined) {
+  <ng-container *ngTemplateOutlet="loadingTemplate" />
+  } @else if ( computedTransformedDocs === null) {
+  <ng-container *ngTemplateOutlet="errorTemplate" />
+  } @else {
+  <ng-container *ngTemplateOutlet="successTemplate" />
+  }
+</div>

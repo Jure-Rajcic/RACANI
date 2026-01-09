@@ -1,0 +1,14 @@
+@if (auth()) {
+<hlm-toaster />
+
+<div class="min-h-screen">
+  <!-- Main Content -->
+  <main class="p-4">
+    <router-outlet />
+  </main>
+</div>
+} @else {
+<div class="min-h-screen min-w-screen flex items-center justify-center">
+  <p>Signing you in...</p>
+</div>
+}
